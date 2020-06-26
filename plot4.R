@@ -17,3 +17,4 @@ with(df.final, {
         legend("topright", legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col=c("black", "red", "blue"), lty = 1, box.lty = 0)
         plot(Datetime, Global_reactive_power, type = "l", xlab = "datetime", ylab = "Global_reactive_power")
 })
+dev.off()
