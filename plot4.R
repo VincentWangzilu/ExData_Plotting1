@@ -1,0 +1,19 @@
+if(!file.exists("household_power_consumption.txt")){download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip", destifile <- "data.zip", method = "curl")}
+unzip("data.zip")
+df <- read.table(file = "household_power_consumption.txt", header = TRUE, sep = ";", na.strings = "?")
+library(dplyr)
+df2 <- subset(df, Date == c("1/2/2007", "2/2/2007"))
+Datetime <- as.POSIXct(paste(df2$Date, df2$Time), format="%d/%m/%Y %H:%M:%S")
+row.names(df2) <- NULL
+df.final <- cbind(Datetime, df2[, 3:9])
+png("plot4.png", width = 480, height = 480)
+par(mfrow = c(2, 2))
+with(df.final, {
+        plot(Datetime, Global_active_power, type = "l", xlab = "", ylab = "Global Active Power (kilowatts)")
+        plot(Datetime, Voltage, type = "l", xlab = "datetime", ylab = "Voltage")
+        with(df.final, plot(Datetime, Sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering"))
+        with(df.final, points(Datetime, Sub_metering_2, type = "l", col = "red"))
+        with(df.final, points(Datetime, Sub_metering_3, type = "l", col = "blue"))
+        legend("topright", legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col=c("black", "red", "blue"), lty = 1, box.lty = 0)
+        plot(Datetime, Global_reactive_power, type = "l", xlab = "datetime", ylab = "Global_reactive_power")
+})
